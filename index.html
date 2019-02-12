@@ -6,8 +6,8 @@
   <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
 </head>
 <body>
-  <script type="text/javascript">
-
+  <script type="text/javascript" >
+  //import {name} from './sign-in-page.html'
     window.fn = {};
     window.fn.open = function() {
       var menu = document.getElementById('menu');
@@ -22,7 +22,7 @@
 
     var restarauntArray = ['McDonald\'s', 'Burger King', 'Wendy\'s', 'Five Guys', 'Sonic', 'Fat Cow']
     var number = Math.floor(Math.random()*restarauntArray.length);
-
+    alert ('Welcome');
     </script>
     <!--<ons-page>
 
@@ -79,6 +79,11 @@
       </div>
       <div class="center">
         Wheel
+      </div>
+      <div class = "right" style="padding-right: 10px;">
+        <ons-toolbar-button modifier="quiet" onClick="location.href = 'sign-in-page.html'">
+        Log out
+      </ons-toolbar-button>
       </div>
     </ons-toolbar>
     <p style="text-align: center; opacity: 0.6; padding-top: 20px;">
