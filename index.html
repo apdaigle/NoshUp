@@ -6,6 +6,24 @@
   <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
 </head>
 <body>
+  <script type="text/javascript">
+
+    window.fn = {};
+    window.fn.open = function() {
+      var menu = document.getElementById('menu');
+      menu.open();
+    };
+
+    window.fn.load = function(page) {
+      var content = document.getElementById('content');
+      var menu = document.getElementById('menu');
+      content.load(page).then(menu.close.bind(menu));
+    };
+
+    var restarauntArray = ['McDonald\'s', 'Burger King', 'Wendy\'s', 'Five Guys', 'Sonic', 'Fat Cow']
+    var number = Math.floor(Math.random()*restarauntArray.length);
+
+    </script>
     <!--<ons-page>
 
     <div class="toolbar">
@@ -109,6 +127,6 @@
       </p>
   </ons-page>
 </template>
-<script src="app.js"></script>
+<!--script src="app.js"></script-->
 </body>
 </html>
