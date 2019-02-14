@@ -81,8 +81,8 @@
         Wheel
       </div>
       <div class = "right" style="padding-right: 10px;">
-        <ons-toolbar-button modifier="quiet" onClick="location.href = 'sign-in-page.html'">
-        Log out
+        <ons-toolbar-button onClick="fn.load('settings.html')">
+          Log Out
       </ons-toolbar-button>
       </div>
     </ons-toolbar>
@@ -109,7 +109,7 @@
         New Wheel
       </div>
       <div class = "right" style="padding-right: 10px;">
-        <ons-toolbar-button modifier="quiet" onClick="location.href = 'sign-in-page.html'">
+        <ons-toolbar-button onClick="fn.load('settings.html')">
         Log out
       </ons-toolbar-button>
       </div>
@@ -132,7 +132,7 @@
         Settings
       </div>
       <div class = "right" style="padding-right: 10px;">
-        <ons-toolbar-button modifier="quiet" onClick="location.href = 'sign-in-page.html'">
+        <ons-toolbar-button onClick="fn.load('settings.html')">
         Log out
       </ons-toolbar-button>
       </div>
@@ -140,6 +140,7 @@
       <p style="text-align: center; opacity: 0.6; padding-top: 20px;">
         Change Settings here
       </p>
+      <ons-button onClick="location.href = 'sign-in-page.html'" modifier="large">Log Out</ons-button>
   </ons-page>
 </template>
 <!--script src="app.js"></script-->
