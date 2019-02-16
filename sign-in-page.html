@@ -1,21 +1,22 @@
 <!doctype html>
 <html>
-<head>
-<title>Register </title>
-<link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <h1>Login:</h1>
-  <script type="text/javascript">
-    var button = document.getElementById('login-button');
-    function onClick(event){
-      var name=document.getElementById("name").value;
-    }
-    button.addEventListener('click', onClick);
-    </script>
-    <form action="./index.html" method="get">
-<p id="name">Name: <input type="text" name=""> </p>
-<button id="login-button">Login</button>
-</form>
-</body>
+    <head>
+    <title>Register </title>
+    <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+      <h1>Login:</h1>
+      <script type="text/javascript">
+        var button = document.getElementById('login-button');
+        function onClick(event){
+          var name=document.getElementById("name").value;
+        }
+        button.addEventListener('click', onClick);
+        </script>
+        <form action="./index.html" method="get">
+            <p>Userame: <input id="name" type="text" name="name"> </p>
+            <p>Password: <input id="password" type="password" name="password"> </p>
+            <button id="login-button">Login</button>
+        </form>
+    </body>
 </html>
