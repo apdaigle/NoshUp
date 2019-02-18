@@ -1,14 +1,14 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
     <head>
     <title>Register </title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css" />
     </head>
     <body>
-      <!--<h1>Login:</h1>-->
-        <script src="https://apis.google.com/js/platform.js" async defer></script>
+      <h1>Login:</h1>
+        <!-- <script src="./platform.js" async defer></script>
         <meta name="google-signin-client_id" content="74065192265-2sjie6096tq88ocsdcc1994cvnfkooui.apps.googleusercontent.com">
-        <div class="g-signin2" data-onsuccess="onSignIn" onClick="location.href = 'index.html'"></div> <!--This line breaks every now and then for some reason -->
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
         <script>
             function onSignIn(googleUser) {
               var profile = googleUser.getBasicProfile();
@@ -17,8 +17,8 @@
               console.log('Image URL: ' + profile.getImageUrl());
               console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
             }
-        </script>
-      <!--<script type="text/javascript">
+        </script> -->
+      <script type="text/javascript">
         var button = document.getElementById('login-button');
         function onClick(event){
           var name=document.getElementById("name").value;
@@ -26,9 +26,9 @@
         button.addEventListener('click', onClick);
         </script>
         <form action="./index.html" method="get">
-            <p>Userame: <input id="name" type="text" name="name"> </p>
+            <p>Username: <input id="name" type="text" name="name"> </p>
             <p>Password: <input id="password" type="password" name="password"> </p>
             <button id="login-button">Login</button>
-        </form>-->
+        </form>
     </body>
 </html>
