@@ -1,0 +1,3 @@
+AIzaSyD_gvFJzFNz6v9XGolQf4jNF1RuGWUhyS0
+
+replace YOUR_API_KEY in the html src with this
