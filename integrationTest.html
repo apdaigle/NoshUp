@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NoshUp</title>
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+    <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        visibility: hidden;
+        /* height: 75%;
+        width: 75%;
+        border: 2px solid black; */
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 20px;
+        padding: 0;
+      }
+      #panel {
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+      }
+
+      #panel select, #panel input {
+        font-size: 15px;
+      }
+
+      #panel select {
+        width: 100%;
+      }
+
+      #panel i {
+        font-size: 12px;
+      }
+      #panel {
+        font-family: Arial, Helvetica, sans-serif;
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        height: 330px;
+        width: 200px;
+        padding: 5px;
+        z-index: 5;
+        border: 1px solid #999;
+        background: #fff;
+      }
+      h2 {
+        font-size: 22px;
+        margin: 0 0 5px 0;
+      }
+      ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        height: 271px;
+        width: 200px;
+        overflow-y: scroll;
+      }
+      li {
+        display:block;
+        background-color: #f1f1f1;
+        padding: 10px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+      li:nth-child(odd) {
+        background-color: #fcfcfc;
+      }
+      #more {
+        width: 100%;
+        margin: 5px 0 0 0;
+      }
+    </style>
+    
+</head>
+<body>
+  <script type="text/javascript" charset="utf-8">
+  //import {name} from './sign-in-page.html'
+    window.fn = {};
+    window.fn.open = function() {
+      var menu = document.getElementById('menu');
+      menu.open();
+    };
+
+    window.fn.load = function(page) {
+      var content = document.getElementById('content');
+      var menu = document.getElementById('menu');
+      content.load(page).then(menu.close.bind(menu));
+    };
+
+    var restarauntArray = ['McDonald\'s', 'Burger King', 'Wendy\'s', 'Five Guys', 'Sonic', 'Fat Cow']
+    var number = Math.floor(Math.random()*restarauntArray.length);
+    //alert ('Welcome, test');
+    </script>
+    <!--<ons-page>
+
+    <div class="toolbar">
+        <div class="toolbar__center">
+            <div class="segment" style="width:200px;margin:7px 50px;">
+              <div class="segment__item" id="New">
+                <input type="radio" class="segment__input" name="navi-segment-a">
+                <div class="segment__button">New</div>
+              </div>
+
+              <div class="segment__item" id="Wheels">
+                <input type="radio" class="segment__input" name="navi-segment-a" checked>
+                <div class="segment__button">Wheels</div>
+              </div>
+
+                <div class="segment__item" id="Settings">
+                <input type="radio" class="segment__input" name="navi-segment-a">
+                <div class="segment__button">Settings</div>
+              </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    </ons-page> -->
+    <ons-splitter>
+  <ons-splitter-side id="menu" side="left" width="220px" collapse swipeable>
+    <ons-page>
+      <ons-list>
+        <ons-list-item onclick="fn.load('wheel.html')" tappable>
+          Wheel
+        </ons-list-item>
+        <ons-list-item onclick="fn.load('new.html')" tappable>
+          New Wheel
+        </ons-list-item>
+        <ons-list-item onclick="fn.load('settings.html')" tappable>
+          Settings
+        </ons-list-item>
+      </ons-list>
+    </ons-page>
+  </ons-splitter-side>
+  <ons-splitter-content id="content" page="wheel.html"></ons-splitter-content>
+</ons-splitter>
+
+<template id="wheel.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left">
+        <ons-toolbar-button onclick="fn.open()">
+          <ons-icon icon="md-menu"></ons-icon>
+        </ons-toolbar-button>
+      </div>
+      <div class="center">
+        Wheel
+      </div>
+      <!-- <div class = "right" style="padding-right: 10px;">
+        <ons-toolbar-button onClick="fn.load('settings.html')">
+          Log out
+      </ons-toolbar-button>
+      </div> -->
+    </ons-toolbar>
+    <!-- <p style="text-align: center; opacity: 0.6; padding-top: 20px;">
+        You're eating at...</p><br><br>
+          <!--<script>
+            window.alert(restarauntArray[number])
+          </script>
+
+        <ons-button value="Refresh Page" onClick="window.location.reload()" modifier="large">Spin!</ons-button> ->
+      <ons-button onClick="number = Math.floor(Math.random()*restarauntArray.length), window.alert(restarauntArray[number])" modifier="large">Spin dat wheel!</ons-button> -->
+    <div id="chart"></div>
+    <div id="info"><h1></h1></div>
+      
+    <div id="map"></div>
+    <div id="panel">
+      <h2>Nearby</h2>
+      <ul id="places"></ul>
+      <button id="more">More results</button>
+    </div>
+      
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_gvFJzFNz6v9XGolQf4jNF1RuGWUhyS0&libraries=places&callback=initMap" async defer></script>  
+
+    <script type="text/javascript" charset="utf-8">
+        var chart = document.getElementById("chart");
+        var tempChart = document.getElementById("chart");
+        var padding = {top:20, right:40, bottom:0, left:0},
+            w = 500 - padding.left - padding.right,
+            h = 500 - padding.top  - padding.bottom,
+            r = Math.min(w, h)/2,
+            rotation = 0,
+            oldrotation = 0,
+            picked = 100000,
+            oldpick = [],
+            color = d3.scale.category20();//category20c()
+        var data = [];
+        
+        function createWheel(){
+            var svg = d3.select('#chart')
+            .append("svg")
+            .data([data])
+            .attr("width",  w + padding.left + padding.right)
+            .attr("height", h + padding.top + padding.bottom);
+        var container = svg.append("g")
+            .attr("class", "chartholder")
+            .attr("transform", "translate(" + (w/2 + padding.left) + "," + (h/2 + padding.top) + ")");
+        var vis = container
+            .append("g");
+
+        var pie = d3.layout.pie().sort(null).value(function(d){return 1;});
+        // declare an arc generator function
+        var arc = d3.svg.arc().outerRadius(r);
+        // select paths, use arc generator to draw
+        var arcs = vis.selectAll("g.slice")
+            .data(pie)
+            .enter()
+            .append("g")
+            .attr("class", "slice");
+
+        arcs.append("path")
+            .attr("fill", function(d, i){ return color(i); })
+            .attr("d", function (d) { return arc(d); });
+        // add the text
+        arcs.append("text").attr("transform", function(d){
+                d.innerRadius = 0;
+                d.outerRadius = r;
+                d.angle = (d.startAngle + d.endAngle)/2;
+                return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(" + (d.outerRadius -10) +")";
+            })
+            .attr("text-anchor", "end")
+            .text( function(d, i) {
+                return data[i].label;
+            });
+        container.on("click", spin);
+        function spin(d){
+
+            container.on("click", null);
+            //all slices have been seen, all done
+            console.log("OldPick: " + oldpick.length, "Data length: " + data.length);
+            if(oldpick.length == data.length){
+                console.log("done");
+                container.on("click", null);
+                return;
+            }
+            var  ps       = 360/data.length,
+                 pieslice = Math.round(1440/data.length),
+                 rng      = Math.floor((Math.random() * 1440) + 360);
+
+            rotation = (Math.round(rng / ps) * ps);
+
+            picked = Math.round(data.length - (rotation % 360)/ps);
+            picked = picked >= data.length ? (picked % data.length) : picked;
+            if (oldpick.indexOf(picked) !== -1) {
+                d3.select(this).call(spin);
+                return;
+            }
+            else {
+                oldpick.push(picked);
+            }
+            rotation += 90 - Math.round(ps/2);
+            vis.transition()
+                .duration(3000)
+                .attrTween("transform", rotTween)
+                .each("end", function(){
+                    //mark slice as seen
+                    d3.select(".slice:nth-child(" + (picked + 1) + ") path")
+                        .attr("fill", "#111");
+                    //populate info
+                    d3.select("#info h1")
+                        .text(data[picked].info);
+                    oldrotation = rotation;
+
+                    container.on("click", spin);
+                });
+        }
+        //make arrow
+        svg.append("g")
+            .attr("transform", "translate(" + (w + padding.left + padding.right) + "," + ((h/2)+padding.top) + ")")
+            .append("path")
+            .attr("d", "M-" + (r*.15) + ",0L0," + (r*.05) + "L0,-" + (r*.05) + "Z")
+            .style({"fill":"black"});
+        //draw spin circle
+        container.append("circle")
+            .attr("cx", 0)
+            .attr("cy", 0)
+            .attr("r", 60)
+            .style({"fill":"white","cursor":"pointer"});
+        //spin text
+        container.append("text")
+            .attr("x", 0)
+            .attr("y", 15)
+            .attr("text-anchor", "middle")
+            .text("SPIN")
+            .style({"font-weight":"bold", "font-size":"30px"});
+
+
+        function rotTween(to) {
+          var i = d3.interpolate(oldrotation % 360, rotation);
+          return function(t) {
+            return "rotate(" + i(t) + ")";
+          };
+        }
+
+
+        // function getRandomNumbers(){
+        //     var array = new Uint16Array(1000);
+        //     var scale = d3.scale.linear().range([360, 1440]).domain([0, 100000]);
+        //     if (window.hasOwnProperty("crypto") && typeof window.crypto.getRandomValues === "function"){
+        //         window.crypto.getRandomValues(array);
+        //         console.log("works");
+        //     }
+        //     else {
+        //         //no support for crypto, get crappy random numbers
+        //         for(var i=0; i < 1000; i++){
+        //             array[i] = Math.floor(Math.random() * 100000) + 1;
+        //         }
+        //     }
+        //     return array;
+        // }
+        }
+        createWheel();
+        
+        //CODE BREAK//
+        
+        // This example requires the Places library. Include the libraries=places
+      // parameter when you first load the API. For example:
+      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+        var map;
+        var activeInfoWindow;
+
+      function initMap() {
+        // Create the map.
+        var lsu = {lat: 30.4133, lng: -91.1800};
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: lsu,
+          zoom: 17
+        });
+
+        // Create the places service.
+        var service = new google.maps.places.PlacesService(map);
+        var getNextPage = null;
+        var moreButton = document.getElementById('more');
+        moreButton.onclick = function() {
+          moreButton.disabled = true;
+          if (getNextPage) getNextPage();
+        };
+
+        var bounds = new google.maps.LatLngBounds();
+
+        // Perform a nearby search.
+        service.nearbySearch(
+            {location: lsu, radius: 2000, type: ['restaurant']},
+            function(results, status, pagination) {
+              if (status !== 'OK') return;
+              results.forEach(function(loc) {
+                createMarker(loc);
+                bounds.extend(loc.geometry.location);
+              })
+              map.fitBounds(bounds);
+              moreButton.disabled = !pagination.hasNextPage;
+              getNextPage = pagination.hasNextPage && function() {
+                pagination.nextPage();
+              };
+            });
+      }
+        
+        
+
+        function createMarker(place) {
+//        var bounds = new google.maps.LatLngBounds();
+          var placesList = document.getElementById('places');
+
+          // var image = {
+          //   size: new google.maps.Size(71, 71),
+          //   origin: new google.maps.Point(0, 0),
+          //   anchor: new google.maps.Point(17, 34),
+          //   scaledSize: new google.maps.Size(25, 25)
+          // };
+          //
+          // var marker = new google.maps.Marker({
+          //   map: map,
+          //   title: place.name,
+          //   position: place.geometry.location
+          // });
+          //
+          // var infowindow = new google.maps.InfoWindow({content: place.name});
+          //
+          // marker.addListener('click', function() {
+          //   if (activeInfoWindow) {activeInfoWindow.close();}
+          //   infowindow.open(map, marker);
+          //   activeInfoWindow = infowindow;
+          // })
+
+          var li = document.createElement('li');
+          li.textContent = place.name;
+          placesList.appendChild(li);
+          li.addEventListener('click', function() {
+              data.push({"label": place.name,  "value":1,  "info":"(" +place.rating+ "/5.0) Located at " +place.vicinity+ "."});
+              chart.innerHTML = "";
+              createWheel();
+          });
+        }
+    </script>
+
+  </ons-page>
+</template>
+
+<template id="new.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left">
+        <ons-toolbar-button onclick="fn.open()">
+          <ons-icon icon="md-menu"></ons-icon>
+        </ons-toolbar-button>
+      </div>
+      <div class="center">
+        New Wheel
+      </div>
+      <!-- <div class = "right" style="padding-right: 10px;">
+        <ons-toolbar-button onClick="fn.load('settings.html')">
+        Log out
+      </ons-toolbar-button>
+      </div> -->
+    </ons-toolbar>
+      <p style="text-align: center; opacity: 0.6; padding-top: 20px;">
+          Text Here
+      </p>
+  </ons-page>
+</template>
+
+<template id="settings.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left">
+        <ons-toolbar-button onclick="fn.open()">
+          <ons-icon icon="md-menu"></ons-icon>
+        </ons-toolbar-button>
+      </div>
+      <div class="center">
+        Settings
+      </div>x
+      <!-- <div class = "right" style="padding-right: 10px;">
+        <ons-toolbar-button onClick="fn.load('settings.html')">
+        Log out
+      </ons-toolbar-button>
+      </div> -->
+    </ons-toolbar>
+      <p style="text-align: center; opacity: 0.6; padding-top: 20px;">
+        Change Settings here
+      </p>
+      <ons-button onClick="location.href = 'sign-in-page.html'" modifier="large">Log Out</ons-button>
+  </ons-page>
+</template>
+<!--script src="app.js"></script-->
+</body>
+</html>
