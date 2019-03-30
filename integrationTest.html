@@ -78,7 +78,7 @@
         margin: 5px 0 0 0;
       }
     </style>
-    
+
 </head>
 <body>
   <script type="text/javascript" charset="utf-8">
@@ -171,15 +171,15 @@
       <ons-button onClick="number = Math.floor(Math.random()*restarauntArray.length), window.alert(restarauntArray[number])" modifier="large">Spin dat wheel!</ons-button> -->
     <div id="chart"></div>
     <div id="info"><h1></h1></div>
-      
+
     <div id="map"></div>
     <div id="panel">
       <h2>Nearby</h2>
       <ul id="places"></ul>
       <button id="more">More results</button>
     </div>
-      
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_gvFJzFNz6v9XGolQf4jNF1RuGWUhyS0&libraries=places&callback=initMap" async defer></script>  
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_gvFJzFNz6v9XGolQf4jNF1RuGWUhyS0&libraries=places&callback=initMap" async defer></script>
 
     <script type="text/javascript" charset="utf-8">
         var chart = document.getElementById("chart");
@@ -194,7 +194,8 @@
             oldpick = [],
             color = d3.scale.category20();//category20c()
         var data = [];
-        
+        var namesData = [];
+
         function createWheel(){
             var svg = d3.select('#chart')
             .append("svg")
@@ -319,9 +320,9 @@
         // }
         }
         createWheel();
-        
+
         //CODE BREAK//
-        
+
         // This example requires the Places library. Include the libraries=places
       // parameter when you first load the API. For example:
       // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
@@ -364,8 +365,8 @@
               };
             });
       }
-        
-        
+
+
 
         function createMarker(place) {
 //        var bounds = new google.maps.LatLngBounds();
@@ -396,9 +397,13 @@
           li.textContent = place.name;
           placesList.appendChild(li);
           li.addEventListener('click', function() {
+            if (!namesData.includes(place.name))
+            {
+              namesData.push(place.name);
               data.push({"label": place.name,  "value":1,  "info":"(" +place.rating+ "/5.0) Located at " +place.vicinity+ "."});
               chart.innerHTML = "";
               createWheel();
+            }
           });
         }
     </script>
