@@ -174,7 +174,7 @@
       <div id="chart"></div>
     <div id="info"><h1></h1></div>
 
-    
+
 
 
 
@@ -190,7 +190,7 @@
             picked = 100000,
             oldpick = [],
             color = d3.scale.category20();//category20c()
-        
+
         var namesData = [];
 
         function createWheel(){
@@ -317,7 +317,7 @@
         //     return array;
         // }
         }
-        
+
         createWheel();
         //CODE BREAK//
 
@@ -401,7 +401,13 @@
                 data.push({"label": place.name,  "value":1,  "info":"(" +place.rating+ "/5.0) Located at " +place.vicinity+ "."});
                 chart.innerHTML = "";
                 createWheel();
-                console.log(data);
+                li.innerHTML = "ADDED";
+            }
+            else
+            {
+                data.splice(namesData.indexOf(place.name), 1);
+                namesData.splice(namesData.indexOf(place.name), 1);
+                li.innerHTML = place.name;
             }
           });
         }
@@ -428,7 +434,7 @@
       </div> -->
     </ons-toolbar>
       <p style="text-align: center; opacity: 0.6; padding-top: 20px;">
-          <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_gvFJzFNz6v9XGolQf4jNF1RuGWUhyS0&libraries=places&callback=initMap" async defer></script>    
+          <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_gvFJzFNz6v9XGolQf4jNF1RuGWUhyS0&libraries=places&callback=initMap" async defer></script>
       <div id="map"></div>
     <div id="panel">
       <h2>Nearby</h2>
@@ -436,7 +442,7 @@
     <button id="more">More results</button>
     <button id="CreateWheel" onclick="fn.load('wheel.html')">Create Wheel</button>
     </div>
-      
+
   </ons-page>
 </template>
 
