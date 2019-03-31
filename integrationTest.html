@@ -41,7 +41,7 @@
       #panel {
         font-family: Arial, Helvetica, sans-serif;
         position: absolute;
-        right: 10px;
+        left: 10px;
         top: 10px;
         height: 330px;
         width: 200px;
@@ -99,6 +99,8 @@
     var number = Math.floor(Math.random()*restarauntArray.length);
     //alert ('Welcome, test');
       var data =[];
+      var namesData = [];
+      var hasLoaded = false;
     </script>
     <!--<ons-page>
 
@@ -179,6 +181,10 @@
 
 
     <script type="text/javascript" charset="utf-8">
+        if (!hasLoaded) {
+            fn.load("new.html");
+            hasLoaded = true;
+        }
         var chart = document.getElementById("chart");
         var tempChart = document.getElementById("chart");
         var padding = {top:20, right:40, bottom:0, left:0},
@@ -191,7 +197,6 @@
             oldpick = [],
             color = d3.scale.category20();//category20c()
 
-        var namesData = [];
 
         function createWheel(){
             var svg = d3.select('#chart')
@@ -287,7 +292,7 @@
         //spin text
         container.append("text")
             .attr("x", 0)
-            .attr("y", 15)
+            .attr("y", 12)
             .attr("text-anchor", "middle")
             .text("SPIN")
             .style({"font-weight":"bold", "font-size":"30px"});
