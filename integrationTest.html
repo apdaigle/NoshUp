@@ -500,7 +500,7 @@
             if (!namesData.includes(place.name))
             {
                 namesData.push(place.name);
-                data.push({"label": place.name,  "value":1,  "info":"(" +place.rating+ "/5.0) Located at " +place.vicinity+ "."});
+                data.push({"label": place.name,  "value":1,  "info": place.name+" (" +place.rating+ "/5.0)"});
                 chart.innerHTML = "";
                 createWheel();
                 li.innerHTML = "ADDED";
