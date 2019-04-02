@@ -90,7 +90,12 @@
         text-decoration: none;
         display: block;
       }
-      .show{display: block;}
+      .dropdown-content a:hover{
+        background-color: #ddd
+      }
+      .show{
+        display: block;
+      }
     </style>
 
 </head>
@@ -119,10 +124,18 @@
       function dropDown(){
         document.getElementById("myDropdown").classList.toggle("show");
       }
-
-      var distanceList = document.getElementById("myDropdown");
-      console.log(distanceList);
-
+      window.onclick=function(event){
+        if(!event.target.matches('.dropbtn')){
+          var dropdowns=document.getElementsByClassName("dromdowns-content");
+          var i;
+          for(i=0;i<dropdowns.length;i++){
+            var openDropdowns=dropddowns[i];
+            if(openDropdowns.classList.contains('show')){
+              openDropdown.classList.remove('show');
+            }
+          }
+        }
+      }
     </script>
     <!--<ons-page>
 
@@ -354,34 +367,82 @@
 
         var map;
         var activeInfoWindow;
+        var lsu;
+        var bounds;
+        var service;
+        var moreButton;
+        var upBut;
+        var distance = 0;
 
-      function initMap() {
+        function initMap() {
         // Create the map.
-        var lsu = {lat: 30.4133, lng: -91.1800};
+        lsu = {lat: 30.4133, lng: -91.1800};
         map = new google.maps.Map(document.getElementById('map'), {
           center: lsu,
           zoom: 17
         });
 
         // Create the places service.
-        var service = new google.maps.places.PlacesService(map);
+        service = new google.maps.places.PlacesService(map);
         var getNextPage = null;
-        var moreButton = document.getElementById('more');
+        moreButton = document.getElementById('more');
         moreButton.onclick = function() {
           moreButton.disabled = true;
           if (getNextPage) getNextPage();
         };
 
-        var bounds = new google.maps.LatLngBounds();
+        var radi;
+        var buttonText = document.getElementById('butText');
 
-        // Perform a nearby search.
-        service.nearbySearch(
-            {location: lsu, radius: 2000, type: ['restaurant']},
+        rad1 = document.getElementById('dropC1');
+        rad1.onclick = function() {
+            //document.getElementById('panel').innerHTML = "";
+            radi = 1*1609.344;
+            buttonText.innerHTML = "1 mile";
+            nearSearch(radi);
+        };
+
+        rad5 = document.getElementById('dropC5');
+        rad5.onclick = function() {
+            //document.getElementById('panel').innerHTML = "";
+            radi = 5*1609.344;
+            buttonText.innerHTML = "5 miles";
+            nearSearch(radi);
+        };
+
+        rad10 = document.getElementById('dropC10');
+        rad10.onclick = function() {
+            //document.getElementById('panel').innerHTML = "";
+            radi = 10*1609.344;
+            buttonText.innerHTML = "10 miles";
+            nearSearch(radi);
+        };
+
+        rad20 = document.getElementById('dropC20');
+        rad20.onclick = function() {
+            //document.getElementById('panel').innerHTML = "";
+            radi = 20*1609.344;
+            buttonText.innerHTML = "20 miles";
+            nearSearch(radi);
+        };
+      }
+        var visitedLoc = [];
+        function nearSearch (rad) {
+          bounds = new google.maps.LatLngBounds();
+
+          // Perform a nearby search.
+          service.nearbySearch(
+            {location: lsu, radius: rad, type: ['restaurant']/*, keyword: ['mexican OR burger OR chinese']*/},
             function(results, status, pagination) {
               if (status !== 'OK') return;
               results.forEach(function(loc) {
-                createMarker(loc);
-                bounds.extend(loc.geometry.location);
+                if (!visitedLoc.includes(loc.name))
+                {
+                  console.log(loc.name);
+                  visitedLoc.push(loc.name);
+                  createMarker(loc);
+                  bounds.extend(loc.geometry.location);
+                }
               })
               map.fitBounds(bounds);
               moreButton.disabled = !pagination.hasNextPage;
@@ -469,12 +530,12 @@
     <button id="more">More results</button>
     <button id="CreateWheel" onclick="fn.load('wheel.html')">Create Wheel</button>
     <div class="dropdown">
-      <button onclick="dropDown()" class="dropbtn">Radius</button>
+      <button onclick="dropDown()" id="butText" class="dropbtn">Radius</button>
       <div id="myDropdown" class="dropdown-content">
-        <a id="1" href="#">1</a>
-        <a id="5" href="#">5</a>
-        <a id="10" href="#">10</a>
-        <a id="20" href="#">20</a>
+        <a id="dropC1" href="#">1</a>
+        <a id="dropC5" href="#">5</a>
+        <a id="dropC10" href="#">10</a>
+        <a id="dropC20" href="#">20</a>
       </div>
     </div>
     </div>
