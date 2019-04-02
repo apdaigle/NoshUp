@@ -1,0 +1,50 @@
+  function initMap() {
+        // Create the map.
+        lsu = {lat: 30.4133, lng: -91.1800};
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: lsu,
+          zoom: 17
+        });
+
+        // Create the places service.
+        service = new google.maps.places.PlacesService(map);
+        var getNextPage = null;
+        moreButton = document.getElementById('more');
+        moreButton.onclick = function() {
+          moreButton.disabled = true;
+          if (getNextPage) getNextPage();
+        };
+
+        upBut = document.getElementById('update');
+        upBut.onclick = function() {
+            distance += 100;
+            // console.log(distance);
+            // console.log(data);
+            nearSearch(distance);
+        };
+      }
+        var visitedLoc = [];
+        function nearSearch (rad) {
+          bounds = new google.maps.LatLngBounds();
+
+          // Perform a nearby search.
+          service.nearbySearch(
+            {location: lsu, radius: rad, type: ['restaurant']/*, keyword: ['mexican OR burger OR chinese']*/},
+            function(results, status, pagination) {
+              if (status !== 'OK') return;
+              results.forEach(function(loc) {
+                if (!visitedLoc.includes(loc.name))
+                {
+                  console.log(loc.name);
+                  visitedLoc.push(loc.name);
+                  createMarker(loc);
+                  bounds.extend(loc.geometry.location);
+                }
+              })
+              map.fitBounds(bounds);
+              moreButton.disabled = !pagination.hasNextPage;
+              getNextPage = pagination.hasNextPage && function() {
+                pagination.nextPage();
+              };
+            });
+      }
