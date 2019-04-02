@@ -22,19 +22,24 @@
         padding: 0;
         overflow: hidden;
       }
-        svg {
+      svg {
         position: fixed;
         top: 50px;
         right: 50px;
         height: 100%;
       }
-        #info h1 {
-            clear: both;
-            position: absolute;
-            top: 475px;
-            left: 0;
-            
-        }
+      #info h1 {
+        clear: both;
+        position: absolute;
+        top: 475px;
+        left: 0;
+      }
+      /* #chartholder {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 10px;
+      } */
       #panel {
         font-family: 'Roboto','sans-serif';
         line-height: 30px;
@@ -247,7 +252,7 @@
             color = d3.scale.category20();//category20c()
 
 
-        function createWheel(){
+      function createWheel() {
             var svg = d3.select('#chart')
             .append("svg")
             .data([data])
@@ -277,11 +282,11 @@
                 d.innerRadius = 0;
                 d.outerRadius = r;
                 d.angle = (d.startAngle + d.endAngle)/2;
-                return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(" + (d.outerRadius -10) +")";
+                return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(" + (d.innerRadius + 70) +")";
             })
-            .attr("text-anchor", "end")
+            .attr("text-anchor", "start")
             .text( function(d, i) {
-                return data[i].label;
+                return shorten(data[i].label);
             });
         container.on("click", spin);
         function spin(d){
@@ -316,7 +321,7 @@
                 .each("end", function(){
                     //mark slice as seen
                     d3.select(".slice:nth-child(" + (picked + 1) + ") path")
-                        .attr("fill", "#111");
+                        .attr("fill", "#404040");
                     //populate info
                     d3.select("#info h1")
                         .text(data[picked].info);
@@ -354,23 +359,14 @@
           };
         }
 
-
-        // function getRandomNumbers(){
-        //     var array = new Uint16Array(1000);
-        //     var scale = d3.scale.linear().range([360, 1440]).domain([0, 100000]);
-        //     if (window.hasOwnProperty("crypto") && typeof window.crypto.getRandomValues === "function"){
-        //         window.crypto.getRandomValues(array);
-        //         console.log("works");
-        //     }
-        //     else {
-        //         //no support for crypto, get crappy random numbers
-        //         for(var i=0; i < 1000; i++){
-        //             array[i] = Math.floor(Math.random() * 100000) + 1;
-        //         }
-        //     }
-        //     return array;
-        // }
+        function shorten(s) {
+          if (s.length > 18)
+            return s.substr(0,18)+'...';
+          else
+            return s;
         }
+
+      }
 
         createWheel();
         //CODE BREAK//
@@ -380,13 +376,10 @@
       // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 
         var map;
-        var activeInfoWindow;
         var lsu;
-        var bounds;
         var service;
         var moreButton;
-        var upBut;
-        var distance = 0;
+        var placesList;
 
         function initMap() {
         // Create the map.
@@ -405,44 +398,20 @@
           if (getNextPage) getNextPage();
         };
 
-        var radi;
         var buttonText = document.getElementById('butText');
+        var dropCs = document.getElementsByClassName('dropC')
 
-        rad1 = document.getElementById('dropC1');
-        rad1.onclick = function() {
-            //document.getElementById('panel').innerHTML = "";
-            radi = 1*1609.344;
-            buttonText.innerHTML = "1 mile";
-            nearSearch(radi);
-        };
-
-        rad5 = document.getElementById('dropC5');
-        rad5.onclick = function() {
-            //document.getElementById('panel').innerHTML = "";
-            radi = 5*1609.344;
-            buttonText.innerHTML = "5 miles";
-            nearSearch(radi);
-        };
-
-        rad10 = document.getElementById('dropC10');
-        rad10.onclick = function() {
-            //document.getElementById('panel').innerHTML = "";
-            radi = 10*1609.344;
-            buttonText.innerHTML = "10 miles";
-            nearSearch(radi);
-        };
-
-        rad20 = document.getElementById('dropC20');
-        rad20.onclick = function() {
-            //document.getElementById('panel').innerHTML = "";
-            radi = 20*1609.344;
-            buttonText.innerHTML = "20 miles";
-            nearSearch(radi);
-        };
+        for (var i = 0; i < dropCs.length; i++)
+        {
+          dropCs[i].onclick = function() {
+            buttonText.innerHTML = this.innerHTML + " mi";
+            nearSearch(this.innerHTML*1609.344);  //meters to miles conversion
+          };
+        }
       }
         var visitedLoc = [];
         function nearSearch (rad) {
-          bounds = new google.maps.LatLngBounds();
+          var bounds = new google.maps.LatLngBounds();
 
           // Perform a nearby search.
           service.nearbySearch(
@@ -452,7 +421,6 @@
               results.forEach(function(loc) {
                 if (!visitedLoc.includes(loc.name))
                 {
-                  console.log(loc.name);
                   visitedLoc.push(loc.name);
                   createMarker(loc);
                   bounds.extend(loc.geometry.location);
@@ -466,32 +434,8 @@
             });
       }
 
-
-
         function createMarker(place) {
-//        var bounds = new google.maps.LatLngBounds();
-          var placesList = document.getElementById('places');
-
-          // var image = {
-          //   size: new google.maps.Size(71, 71),
-          //   origin: new google.maps.Point(0, 0),
-          //   anchor: new google.maps.Point(17, 34),
-          //   scaledSize: new google.maps.Size(25, 25)
-          // };
-          //
-          // var marker = new google.maps.Marker({
-          //   map: map,
-          //   title: place.name,
-          //   position: place.geometry.location
-          // });
-          //
-          // var infowindow = new google.maps.InfoWindow({content: place.name});
-          //
-          // marker.addListener('click', function() {
-          //   if (activeInfoWindow) {activeInfoWindow.close();}
-          //   infowindow.open(map, marker);
-          //   activeInfoWindow = infowindow;
-          // })
+          placesList = document.getElementById('places');
 
           var li = document.createElement('li');
           li.textContent = place.name;
@@ -500,7 +444,7 @@
             if (!namesData.includes(place.name))
             {
                 namesData.push(place.name);
-                data.push({"label": place.name,  "value":1,  "info": place.name+" (" +place.rating+ "/5.0)"});
+                data.push({"label": place.name,  "value":1,  "info": place.name + " (" + place.rating + "/5.0)"});
                 chart.innerHTML = "";
                 createWheel();
                 li.innerHTML = "ADDED";
@@ -513,6 +457,7 @@
             }
           });
         }
+
     </script>
 
   </ons-page>
@@ -546,10 +491,10 @@
     <div class="dropdown">
       <button onclick="dropDown()" id="butText" class="dropbtn">Radius</button>
       <div id="myDropdown" class="dropdown-content">
-        <a id="dropC1" href="#">1</a>
-        <a id="dropC5" href="#">5</a>
-        <a id="dropC10" href="#">10</a>
-        <a id="dropC20" href="#">20</a>
+        <a class="dropC" href="#">1</a>
+        <a class="dropC" href="#">5</a>
+        <a class="dropC" href="#">10</a>
+        <a class="dropC" href="#">20</a>
       </div>
     </div>
     </div>
