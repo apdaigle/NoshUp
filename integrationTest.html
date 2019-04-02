@@ -20,7 +20,21 @@
         height: 100%;
         margin: 20px;
         padding: 0;
+        overflow: hidden;
       }
+        svg {
+        position: fixed;
+        top: 50px;
+        right: 50px;
+        height: 100%;
+      }
+        #info h1 {
+            clear: both;
+            position: absolute;
+            top: 475px;
+            left: 0;
+            
+        }
       #panel {
         font-family: 'Roboto','sans-serif';
         line-height: 30px;
@@ -486,7 +500,7 @@
             if (!namesData.includes(place.name))
             {
                 namesData.push(place.name);
-                data.push({"label": place.name,  "value":1,  "info":"(" +place.rating+ "/5.0) Located at " +place.vicinity+ "."});
+                data.push({"label": place.name,  "value":1,  "info": place.name+" (" +place.rating+ "/5.0)"});
                 chart.innerHTML = "";
                 createWheel();
                 li.innerHTML = "ADDED";
