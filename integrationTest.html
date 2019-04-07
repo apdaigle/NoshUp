@@ -98,13 +98,9 @@
       li:nth-child(odd) {
         background-color: #fcfcfc;
       }
-      #more {
-        width: 100%;
-        margin: 10px 0 0 0;
-      }
       #CreateWheel {
         width: 100%;
-        margin: 0 0 0 0;
+        margin: 13px 0 0 0;
       }
 
       /* CSS for radius*/
@@ -220,6 +216,9 @@
       p {
         font-size: 14px;
       }
+      .show {
+        display: block;
+      }
     </style>
 
 </head>
@@ -245,17 +244,17 @@
       var namesData = [];
       var hasLoaded = false;
 
-      function dropDown(){
+      function dropDown() {
         document.getElementById("myDropdown").classList.toggle("show");
       }
       window.onclick=function(event){
         if(!event.target.matches('.dropbtn')){
-          var dropdowns=document.getElementsByClassName("dromdowns-content");
+          var dropdowns=document.getElementsByClassName("dropdown-content");
           var i;
           for(i=0;i<dropdowns.length;i++){
-            var openDropdowns=dropddowns[i];
+            var openDropdowns=dropdowns[i];
             if(openDropdowns.classList.contains('show')){
-              openDropdown.classList.remove('show');
+              openDropdowns.classList.remove('show');
             }
           }
         }
@@ -477,15 +476,10 @@
       }
 
         createWheel();
-        //CODE BREAK//
 
-        // This example requires the Places library. Include the libraries=places
-      // parameter when you first load the API. For example:
-      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 
         var map;
         var service;
-        var moreButton;
         var placesList;
         var pos;
 
@@ -518,27 +512,29 @@
         // Create the places service.
         service = new google.maps.places.PlacesService(map);
         var getNextPage = null;
-        moreButton = document.getElementById('more');
-        moreButton.onclick = function() {
-          moreButton.disabled = true;
-          if (getNextPage) getNextPage();
-        };
+
 
         var buttonText = document.getElementById('butText');
-        var dropCs = document.getElementsByClassName('dropC')
+        var dropCs = document.getElementsByClassName('dropC');
 
         for (var i = 0; i < dropCs.length; i++)
         {
           dropCs[i].onclick = function() {
+            var tempList = document.getElementById("places")
+            while(tempList.firstChild) {
+              tempList.removeChild(tempList.firstChild);
+            }
+            visitedLoc = [];
             buttonText.innerHTML = this.innerHTML + " mi";
             nearSearch(this.innerHTML*1609.344);  //meters to miles conversion
+
           };
         }
       }
 
       function handleLocationError(browserHasGeolocation, pos) {
         alert(browserHasGeolocation ?
-                              'Error: The Geolocation service failed.\nLocation set to New Orleans, LA.' :
+                              'Geolocation service denied.\nLocation set to New Orleans, LA.' :
                               'Error: Your browser doesn\'t support geolocation.\nLocation set to New Orleans, LA.');
       }
 
@@ -567,10 +563,6 @@
                 }
               })
               map.fitBounds(bounds);
-              moreButton.disabled = !pagination.hasNextPage;
-              getNextPage = pagination.hasNextPage && function() {
-                pagination.nextPage();
-              };
             });
       }
 
@@ -630,7 +622,6 @@
     <div id="panel">
       <h2>Nearby</h2>
       <ul id="places"></ul>
-    <button id="more">More results</button>
     <button id="CreateWheel" onclick="fn.load('wheel.html')">Create Wheel</button>
     <div class="dropdown">
       <button onclick="dropDown()" id="butText" class="dropbtn">Radius</button>
