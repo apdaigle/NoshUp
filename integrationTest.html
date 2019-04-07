@@ -436,7 +436,7 @@
                 });
             var dirLink = document.getElementById('info');
             dirLink.addEventListener('click', function() {
-              window.location.replace("https://www.google.com/maps/dir/?api=1&destination=" + data[picked].label);
+              window.location.assign("https://www.google.com/maps/dir/?api=1&destination=" + data[picked].label);
             });
         }
         //make arrow
@@ -491,11 +491,29 @@
 
         function initMap() {
         // Create the map.
-        lsu = {lat: 30.4133, lng: -91.1800};
+        lsu = {lat: 33.0198, lng: -96.6989};
         map = new google.maps.Map(document.getElementById('map'), {
           center: lsu,
           zoom: 17
         });
+
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            map.setCenter(pos);
+
+          }, function() {
+            handleLocationError(true, map.getCenter());
+          });
+        } else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false, map.getCenter());
+        }
 
         // Create the places service.
         service = new google.maps.places.PlacesService(map);
@@ -516,6 +534,12 @@
             nearSearch(this.innerHTML*1609.344);  //meters to miles conversion
           };
         }
+      }
+
+      function handleLocationError(browserHasGeolocation, pos) {
+        alert(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.\nLocation set to LSU. Geaux Tigers!' :
+                              'Error: Your browser doesn\'t support geolocation.\nLocation set to LSU. Geaux Tigers!');
       }
 
         var keywordsPicked = [];
@@ -598,6 +622,10 @@
     </ons-toolbar>
       <p style="text-align: center; opacity: 0.6; padding-top: 20px;">
           <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_gvFJzFNz6v9XGolQf4jNF1RuGWUhyS0&libraries=places&callback=initMap" async defer></script>
+          <script type="text/javascript" charset="utf-8">
+            data = [];
+            namesData = [];
+          </script>
       <div id="map"></div>
     <div id="panel">
       <h2>Nearby</h2>
