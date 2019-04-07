@@ -484,23 +484,23 @@
       // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 
         var map;
-        var lsu;
         var service;
         var moreButton;
         var placesList;
+        var pos;
 
         function initMap() {
         // Create the map.
-        lsu = {lat: 33.0198, lng: -96.6989};
+        pos = {lat: 29.9511, lng: -90.0715};
         map = new google.maps.Map(document.getElementById('map'), {
-          center: lsu,
+          center: pos,
           zoom: 17
         });
 
         // Try HTML5 geolocation.
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(function(position) {
-            var pos = {
+            pos = {
               lat: position.coords.latitude,
               lng: position.coords.longitude
             };
@@ -538,8 +538,8 @@
 
       function handleLocationError(browserHasGeolocation, pos) {
         alert(browserHasGeolocation ?
-                              'Error: The Geolocation service failed.\nLocation set to LSU. Geaux Tigers!' :
-                              'Error: Your browser doesn\'t support geolocation.\nLocation set to LSU. Geaux Tigers!');
+                              'Error: The Geolocation service failed.\nLocation set to New Orleans, LA.' :
+                              'Error: Your browser doesn\'t support geolocation.\nLocation set to New Orleans, LA.');
       }
 
         var keywordsPicked = [];
@@ -555,7 +555,7 @@
 
           // Perform a nearby search.
           service.nearbySearch(
-            {location: lsu, radius: rad, type: ['restaurant'], keyword: [keywordsPicked.join(" OR ")]},
+            {location: pos, radius: rad, type: ['restaurant'], keyword: [keywordsPicked.join(" OR ")]},
             function(results, status, pagination) {
               if (status !== 'OK') return;
               results.forEach(function(loc) {
