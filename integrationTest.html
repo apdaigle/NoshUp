@@ -105,7 +105,8 @@
 
       /* CSS for radius*/
       .dropbtn {
-        min-width: 58px;
+        width: 100%;
+        margin: 13px 0 0 0;
       }
       .dropdown-content {
         display: none;
@@ -525,7 +526,7 @@
               tempList.removeChild(tempList.firstChild);
             }
             visitedLoc = [];
-            buttonText.innerHTML = this.innerHTML + " mi";
+            buttonText.innerHTML = this.innerHTML;
             nearSearch(this.innerHTML*1609.344);  //meters to miles conversion
 
           };
@@ -626,10 +627,10 @@
     <div class="dropdown">
       <button onclick="dropDown()" id="butText" class="dropbtn">Radius</button>
       <div id="myDropdown" class="dropdown-content">
-        <a class="dropC">1</a>
-        <a class="dropC">5</a>
-        <a class="dropC">10</a>
-        <a class="dropC">20</a>
+        <a class="dropC">1 mile</a>
+        <a class="dropC">5 miles</a>
+        <a class="dropC">10 miles</a>
+        <a class="dropC">20 miles</a>
       </div>
     </div>
     <div>
