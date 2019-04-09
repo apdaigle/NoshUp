@@ -511,6 +511,7 @@
 
         var buttonText = document.getElementById('butText');
         var dropCs = document.getElementsByClassName('dropC');
+        var subStrNumb;
 
         for (var i = 0; i < dropCs.length; i++)
         {
@@ -521,7 +522,8 @@
             }
             visitedLoc = [];
             buttonText.innerHTML = this.innerHTML;
-            nearSearch(this.innerHTML*1609.344);  //meters to miles conversion
+            subStrNumb=this.innerHTML.substring(0,2);
+            nearSearch(subStrNumb*1609.344);  //meters to miles conversion
 
           };
         }
@@ -621,10 +623,10 @@
     <div class="dropdown">
       <button onclick="dropDown()" id="butText" class="dropbtn">Radius</button>
       <div id="myDropdown" class="dropdown-content">
-        <a class="dropC">1 mile</a>
-        <a class="dropC">5 miles</a>
-        <a class="dropC">10 miles</a>
-        <a class="dropC">20 miles</a>
+        <a class="dropC" value="1">1 mile</a>
+        <a class="dropC" value="5">5 miles</a>
+        <a class="dropC" value="10">10 miles</a>
+        <a class="dropC" value="20">20 miles</a>
       </div>
     </div>
     <div>
