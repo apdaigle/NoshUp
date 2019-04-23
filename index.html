@@ -1,10 +1,221 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
-  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
-  <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
-  <script src="https://d3js.org/d3.v3.min.js"></script>
+    <title>NoshUp</title>
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+    <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        visibility: hidden;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 20px;
+        padding: 0;
+        overflow: hidden;
+      }
+      svg {
+        position: fixed;
+        top: 100px;
+        right: 50px;
+        height: 100%;
+      }
+      #info h1 {
+        font-size: 150%;
+        clear: both;
+        position: fixed;
+        bottom: 50px;
+        left: 10px;
+        text-decoration: underline;
+      }
+      #info h1:hover {
+        color: blue;
+      }
+      #panel {
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+      }
+
+      #panel select, #panel input {
+        font-size: 15px;
+      }
+
+      #panel select {
+        width: 100%;
+      }
+
+      #panel i {
+        font-size: 12px;
+      }
+      #panel {
+        font-family: Arial, Helvetica, sans-serif;
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        height: 340px;
+        width: 210px;
+        padding: 5px;
+        z-index: 5;
+        border: 1px solid #999;
+        background: #fff;
+      }
+      h2 {
+        font-size: 22px;
+        margin: 0 0 5px 0;
+      }
+      ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        height: 271px;
+        width: 200px;
+        overflow-y: scroll;
+      }
+      li {
+        display:block;
+        background-color: #f1f1f1;
+        padding: 10px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+      li:nth-child(odd) {
+        background-color: #fcfcfc;
+      }
+      #CreateWheel {
+        width: 100%;
+        margin: 20px 0 0 0;
+      }
+
+      /* CSS for radius*/
+      .dropbtn {
+        width: 100%;
+        margin: 1px 0 0 0;
+      }
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 58px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+      }
+
+      .dropdown-content a {
+        text-align: center;
+        color: black;
+        padding: 1px 0 1px 0;
+        text-decoration: none;
+        display: block;
+      }
+
+      .show{
+        display: block;
+      }
+
+      /* CSS for type/keyword */
+      /* The container */
+      .container {
+        display: block;
+        position: relative;
+        padding-left: 35px;
+        margin-bottom: 14px;
+        cursor: pointer;
+        font-size: 16px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      /* Hide the browser's default checkbox */
+      .container input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+      }
+
+      /* Create a custom checkbox */
+      .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 25px;
+        width: 25px;
+        background-color: #F9F9F9;
+        border: solid black;
+        border-width: 1px 1px 1px 1px;
+      }
+
+      /* On mouse-over, add a grey background color */
+      .container:hover input ~ .checkmark {
+        background-color: #ccc;
+      }
+
+      /* When the checkbox is checked, add a blue background */
+      .container input:checked ~ .checkmark {
+        background-color: #2196F3;
+      }
+
+      /* Create the checkmark/indicator (hidden when not checked) */
+      .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+      }
+
+      /* Show the checkmark when checked */
+      .container input:checked ~ .checkmark:after {
+        display: block;
+      }
+
+      /* Style the checkmark/indicator */
+      .container .checkmark:after {
+        left: 9px;
+        top: 5px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+      }
+
+      /* Style the submit button */
+      #subm {
+        position: absolute;
+        top: 423px;
+        left: 200px;
+      }
+
+      p {
+        font-size: 14px;
+      }
+      .show {
+        display: block;
+      }
+      ons-splitter {
+        position: fixed;
+        top: 30px;
+        width: 100%;
+      }
+      button {
+        background-color: #A9A9A9;
+        padding-top: 3px;
+        padding-bottom: 3px;
+      }
+    </style>
+
 </head>
 <body>
   <script type="text/javascript" charset="utf-8">
@@ -21,33 +232,27 @@
       content.load(page).then(menu.close.bind(menu));
     };
 
-    var restarauntArray = ['McDonald\'s', 'Burger King', 'Wendy\'s', 'Five Guys', 'Sonic', 'Fat Cow']
-    var number = Math.floor(Math.random()*restarauntArray.length);
-    //alert ('Welcome, test');
+      var data =[];
+      var namesData = [];
+      var hasLoaded = false;
+
+      function dropDown() {
+        document.getElementById("myDropdown").classList.toggle("show");
+      }
+      window.onclick=function(event){
+        if(!event.target.matches('.dropbtn')){
+          var dropdowns=document.getElementsByClassName("dropdown-content");
+          var i;
+          for(i=0;i<dropdowns.length;i++){
+            var openDropdowns=dropdowns[i];
+            if(openDropdowns.classList.contains('show')){
+              openDropdowns.classList.remove('show');
+            }
+          }
+        }
+      }
     </script>
     <!--<ons-page>
-
-    <div class="toolbar">
-        <div class="toolbar__center">
-            <div class="segment" style="width:200px;margin:7px 50px;">
-              <div class="segment__item" id="New">
-                <input type="radio" class="segment__input" name="navi-segment-a">
-                <div class="segment__button">New</div>
-              </div>
-
-              <div class="segment__item" id="Wheels">
-                <input type="radio" class="segment__input" name="navi-segment-a" checked>
-                <div class="segment__button">Wheels</div>
-              </div>
-
-                <div class="segment__item" id="Settings">
-                <input type="radio" class="segment__input" name="navi-segment-a">
-                <div class="segment__button">Settings</div>
-              </div>
-
-            </div>
-        </div>
-    </div>
 
 
     </ons-page> -->
@@ -81,24 +286,21 @@
       <div class="center">
         Wheel
       </div>
-      <!-- <div class = "right" style="padding-right: 10px;">
-        <ons-toolbar-button onClick="fn.load('settings.html')">
-          Log out
-      </ons-toolbar-button>
-      </div> -->
     </ons-toolbar>
-    <!-- <p style="text-align: center; opacity: 0.6; padding-top: 20px;">
-        You're eating at...</p><br><br>
-          <!--<script>
-            window.alert(restarauntArray[number])
-          </script>
+      <div id="chart"></div>
+    <div id="info" href="https://www.google.com/maps/search/?api=1"><h1></h1></div>
 
-        <ons-button value="Refresh Page" onClick="window.location.reload()" modifier="large">Spin!</ons-button> ->
-      <ons-button onClick="number = Math.floor(Math.random()*restarauntArray.length), window.alert(restarauntArray[number])" modifier="large">Spin dat wheel!</ons-button> -->
-    <div id="chart"></div>
-    <div id="info"><h1></h1></div>
+
+
+
 
     <script type="text/javascript" charset="utf-8">
+        if (!hasLoaded) {
+            fn.load("new.html");
+            hasLoaded = true;
+        }
+        var chart = document.getElementById("chart");
+        var tempChart = document.getElementById("chart");
         var padding = {top:20, right:40, bottom:0, left:0},
             w = 500 - padding.left - padding.right,
             h = 500 - padding.top  - padding.bottom,
@@ -108,15 +310,10 @@
             picked = 100000,
             oldpick = [],
             color = d3.scale.category20();//category20c()
-        var data = [
-                    {"label":"McDonald's",  "value":1,  "info":"Classic, long-running fast-food chain known for its burgers, fries & shakes."},
-                    {"label":"Burger King",  "value":1,  "info":"Well-known fast-food chain serving grilled burgers, fries & shakes, plus breakfast."},
-                    {"label":"Wendy's",  "value":1,  "info":"Fast-food burger chain serving sides such as chili & baked potatoes."},
-                    {"label":"Five Guys",  "value":1,  "info":"Fast-food chain with made-to-order burgers, fries & hot dogs, plus free peanuts while you wait."},
-                    {"label":"Sonic",  "value":1,  "info":"Fast-food burger & fries joint with an old-school feel, including retro drive-in service."},
-                    {"label":"Fat Cow",  "value":1,  "info":"Industrial burger joint vending signature burgers with house-ground beef, hand-cut fries & salads."}
-        ];
-        var svg = d3.select('#chart')
+
+
+      function createWheel() {
+            var svg = d3.select('#chart')
             .append("svg")
             .data([data])
             .attr("width",  w + padding.left + padding.right)
@@ -145,21 +342,21 @@
                 d.innerRadius = 0;
                 d.outerRadius = r;
                 d.angle = (d.startAngle + d.endAngle)/2;
-                return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(" + (d.outerRadius -10) +")";
+                return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(" + (d.innerRadius + 70) +")";
             })
-            .attr("text-anchor", "end")
+            .attr("text-anchor", "start")
             .text( function(d, i) {
-                return data[i].label;
+                return shorten(data[i].label);
             });
         container.on("click", spin);
+        container.on("drag", spin);
         function spin(d){
-
             container.on("click", null);
+            container.on("drag", null);
             //all slices have been seen, all done
-            console.log("OldPick: " + oldpick.length, "Data length: " + data.length);
             if(oldpick.length == data.length){
-                console.log("done");
                 container.on("click", null);
+                container.on("drag", null);
                 return;
             }
             var  ps       = 360/data.length,
@@ -184,14 +381,19 @@
                 .each("end", function(){
                     //mark slice as seen
                     d3.select(".slice:nth-child(" + (picked + 1) + ") path")
-                        .attr("fill", "#111");
+                        .attr("fill", "#404040");
                     //populate info
                     d3.select("#info h1")
                         .text(data[picked].info);
                     oldrotation = rotation;
 
                     container.on("click", spin);
+                    container.on("drag", spin);
                 });
+            var dirLink = document.getElementById('info');
+            dirLink.addEventListener('click', function() {
+              window.open("http://www.google.com/maps/dir/?api=1&destination=" + data[picked].label);
+            });
         }
         //make arrow
         svg.append("g")
@@ -208,7 +410,7 @@
         //spin text
         container.append("text")
             .attr("x", 0)
-            .attr("y", 15)
+            .attr("y", 12)
             .attr("text-anchor", "middle")
             .text("SPIN")
             .style({"font-weight":"bold", "font-size":"30px"});
@@ -221,22 +423,140 @@
           };
         }
 
+        function shorten(s) {
+          if (s.length > 18)
+            return s.substr(0,18)+'...';
+          else
+            return s;
+        }
 
-        // function getRandomNumbers(){
-        //     var array = new Uint16Array(1000);
-        //     var scale = d3.scale.linear().range([360, 1440]).domain([0, 100000]);
-        //     if (window.hasOwnProperty("crypto") && typeof window.crypto.getRandomValues === "function"){
-        //         window.crypto.getRandomValues(array);
-        //         console.log("works");
-        //     }
-        //     else {
-        //         //no support for crypto, get crappy random numbers
-        //         for(var i=0; i < 1000; i++){
-        //             array[i] = Math.floor(Math.random() * 100000) + 1;
-        //         }
-        //     }
-        //     return array;
-        // }
+      }
+
+        createWheel();
+
+
+        var map;
+        var service;
+        var placesList;
+        var pos;
+        var currentRadius = 15;
+
+        function initMap() {
+        // Create the map.
+        pos = {lat: 29.9511, lng: -90.0715};
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: pos,
+          zoom: 17
+        });
+
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            nearSearch(currentRadius*1609.344);
+            map.setCenter(pos);
+
+          }, function() {
+            handleLocationError(true, map.getCenter());
+            nearSearch(currentRadius*1609.344);
+          });
+        } else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false, map.getCenter());
+          nearSearch(currentRadius*1609.344);
+        }
+        // Create the places service.
+        service = new google.maps.places.PlacesService(map);
+        var getNextPage = null;
+
+
+        var buttonText = document.getElementById('butText');
+        var dropCs = document.getElementsByClassName('dropC');
+
+        for (var i = 0; i < dropCs.length; i++)
+        {
+          dropCs[i].onclick = function() {
+            var tempList = document.getElementById("places")
+            while(tempList.firstChild) {
+              tempList.removeChild(tempList.firstChild);
+            }
+            visitedLoc = [];
+            buttonText.innerHTML = this.innerHTML;
+            currentRadius=this.innerHTML.substring(0,2);
+            nearSearch(currentRadius*1609.344);  //meters to miles conversion
+
+          };
+        }
+      }
+
+      function handleLocationError(browserHasGeolocation, pos) {
+        alert(browserHasGeolocation ?
+                              'Geolocation service denied.\nLocation set to New Orleans, LA.' :
+                              'Error: Your browser doesn\'t support geolocation.\nLocation set to New Orleans, LA.');
+      }
+
+        var keywordsPicked = [];
+        function submit() {
+          keywordsPicked = [];
+          $.each($("input[name='restaurant']:checked"), function(){
+              keywordsPicked.push($(this).val());
+          });
+          var tempList = document.getElementById("places")
+          while(tempList.firstChild) {
+            tempList.removeChild(tempList.firstChild);
+          }
+          visitedLoc = [];
+          nearSearch(currentRadius*1609.344);
+        }
+
+        var visitedLoc = [];
+        function nearSearch (rad) {
+          var bounds = new google.maps.LatLngBounds();
+
+          // Perform a nearby search.
+          service.nearbySearch(
+            {location: pos, radius: rad, type: ['restaurant'], keyword: [keywordsPicked.join(" OR ")]},
+            function(results, status, pagination) {
+              if (status !== 'OK') return;
+              results.forEach(function(loc) {
+                if (!visitedLoc.includes(loc.name))
+                {
+                  visitedLoc.push(loc.name);
+                  createMarker(loc);
+                  bounds.extend(loc.geometry.location);
+                }
+              })
+              map.fitBounds(bounds);
+            });
+      }
+
+        function createMarker(place) {
+          placesList = document.getElementById('places');
+
+          var li = document.createElement('li');
+          li.textContent = place.name;
+          placesList.appendChild(li);
+          li.addEventListener('click', function() {
+            if (!namesData.includes(place.name))
+            {
+                namesData.push(place.name);
+                data.push({"label": place.name,  "value":1,  "info": place.name + " (" + place.rating + "/5.0)"});
+                chart.innerHTML = "";
+                createWheel();
+                li.innerHTML = "ADDED";
+            }
+            else
+            {
+                data.splice(namesData.indexOf(place.name), 1);
+                namesData.splice(namesData.indexOf(place.name), 1);
+                li.innerHTML = place.name;
+            }
+          });
+        }
+
     </script>
 
   </ons-page>
@@ -253,15 +573,87 @@
       <div class="center">
         New Wheel
       </div>
-      <!-- <div class = "right" style="padding-right: 10px;">
-        <ons-toolbar-button onClick="fn.load('settings.html')">
-        Log out
-      </ons-toolbar-button>
-      </div> -->
     </ons-toolbar>
       <p style="text-align: center; opacity: 0.6; padding-top: 20px;">
-          Input data to create Restaraunt Array here
-      </p>
+          <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_gvFJzFNz6v9XGolQf4jNF1RuGWUhyS0&libraries=places&callback=initMap" async defer></script>
+          <script type="text/javascript" charset="utf-8">
+            data = [];
+            namesData = [];
+          </script>
+      <div id="map"></div>
+    <div id="panel">
+      <h2>Nearby</h2>
+      <ul id="places"></ul>
+    <button id="CreateWheel" onclick="fn.load('wheel.html')">Create Wheel</button>
+    <div class="dropdown">
+      <button onclick="dropDown()" id="butText" class="dropbtn">Radius</button>
+      <div id="myDropdown" class="dropdown-content">
+        <a class="dropC" value="1">1 mile</a>
+        <a class="dropC" value="5">5 miles</a>
+        <a class="dropC" value="10">10 miles</a>
+        <a class="dropC" value="20">20 miles</a>
+      </div>
+    </div>
+    <div>
+    <p><strong>What are you HUNGRY for?</strong></p>
+          <label class="container">
+          <input class="single-checkbox" type="checkbox" name="restaurant" value="American"> American<br>
+          <span class="checkmark"></span>
+        </label>
+        <label class="container">
+          <input class="single-checkbox" type="checkbox" name="restaurant" value="Barbecue"> Barbecue<br>
+          <span class="checkmark"></span>
+        </label>
+        <label class="container">
+          <input class="single-checkbox" type="checkbox" name="restaurant" value="Chinese"> Chinese<br>
+          <span class="checkmark"></span>
+        </label>
+        <label class="container">
+          <input class="single-checkbox" type="checkbox" name="restaurant" value="French"> French<br>
+          <span class="checkmark"></span>
+        </label>
+        <label class="container">
+          <input class="single-checkbox" type="checkbox" name="restaurant" value="Hamburger"> Hamburger<br>
+          <span class="checkmark"></span>
+        </label>
+        <label class="container">
+          <input class="single-checkbox" type="checkbox" name="restaurant" value="Indian"> Indian<br>
+          <span class="checkmark"></span>
+        </label>
+        <label class="container">
+          <input class="single-checkbox" type="checkbox" name="restaurant" value="Italian"> Italian<br>
+          <span class="checkmark"></span>
+        </label>
+        <label class="container">
+          <input class="single-checkbox" type="checkbox" name="restaurant" value="Japanese"> Japanese<br>
+          <span class="checkmark"></span>
+        </label>
+        <label class="container">
+          <input class="single-checkbox" type="checkbox" name="restaurant" value="Mexican"> Mexican<br>
+          <span class="checkmark"></span>
+        </label>
+        <label class="container">
+          <input class="single-checkbox" type="checkbox" name="restaurant" value="Pizza"> Pizza<br>
+          <span class="checkmark"></span>
+        </label>
+        <label class="container">
+          <input class="single-checkbox" type="checkbox" name="restaurant" value="Seafood"> Seafood<br>
+          <span class="checkmark"></span>
+        </label>
+        <label class="container">
+          <input class="single-checkbox" type="checkbox" name="restaurant" value="Steak"> Steak<br>
+          <span class="checkmark"></span>
+        </label>
+        <label class="container">
+          <input class="single-checkbox" type="checkbox" name="restaurant" value="Sushi"> Sushi<br><br>
+          <span class="checkmark"></span>
+        </label>
+          <button id="subm" onclick = submit()>Apply</button>
+    </div>
+    </div>
+
+
+
   </ons-page>
 </template>
 
@@ -275,19 +667,14 @@
       </div>
       <div class="center">
         Settings
-      </div>x
-      <!-- <div class = "right" style="padding-right: 10px;">
-        <ons-toolbar-button onClick="fn.load('settings.html')">
-        Log out
-      </ons-toolbar-button>
-      </div> -->
+      </div>
     </ons-toolbar>
       <p style="text-align: center; opacity: 0.6; padding-top: 20px;">
-        Change Settings here
+        Color Changing DLC Coming Soon
       </p>
-      <ons-button onClick="location.href = 'sign-in-page.html'" modifier="large">Log Out</ons-button>
+      <ons-button onClick="location.href = 'index.html'" modifier="large">Restart</ons-button>
   </ons-page>
 </template>
-<!--script src="app.js"></script-->
+
 </body>
 </html>
